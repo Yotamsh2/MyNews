@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">My News</string>
+    <string name="updates">Updates</string>
+    <string name="weather">Weather</string>
+    <string name="set_notifications">Set Notifications</string>
+    <string name="item_name">item_name</string>
+    <string name="description">Description</string>
+    <string name="article_title">Article Title</string>
+    <string name="add_item">Add Item</string>
+    <string name="new_item">New Item</string>
+    <string name="item_title">Item Title</string>
+    <string name="time_of_publish">Time of publish</string>
+    <string name="choose_category">Choose category</string>
+    <string name="new_ad_item">New Ad Item</string>
+    <string name="location">Location</string>
+    <string name="ads_near_you">Ads near you</string>
+    <string name="news">News</string>
+    <string name="ads_by_location">Ads (by location)</string>
+    <string name="set_notification">Set Notification</string>
+    <string name="once_a_day_you_will_receive_the_last_news_in_which_category_you_ll_choose_please_set_the_time">Once a day you will receive the last news in which category you\'ll choose. Please set the time:</string>
+</resources>

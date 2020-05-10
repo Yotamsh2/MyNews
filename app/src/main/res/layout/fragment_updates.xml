@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="5dp"
+    android:maxHeight="50dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/news"
+            android:textColor="@color/colorPrimary"
+            android:paddingVertical="5dp"/>
+
+        <TextView
+            android:id="@+id/addItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_item"
+            android:textColor="@color/colorAccent"
+            android:paddingStart="10dp"
+            android:paddingVertical="5dp"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/messageTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Message TextView"
+        android:gravity="center"
+        android:textColor="#000"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/update_recycler"/>
+</LinearLayout>

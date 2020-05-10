@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:text="@string/new_item" />
+
+    <EditText
+        android:id="@+id/itemEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/item_title"
+        android:singleLine="true"/>
+    <EditText
+        android:id="@+id/descriptionET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/description"/>
+    <EditText
+        android:id="@+id/timeET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/time_of_publish"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:id="@+id/iconSports"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_directions_run_black_24dp"/>
+        <ImageButton
+            android:id="@+id/iconHealth"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_healing_black_24dp"/>
+        <ImageButton
+            android:id="@+id/iconMusic"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_music_note_black_24dp"/>
+        <ImageButton
+            android:id="@+id/iconCars"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_directions_car_black_24dp"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/categoryTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_category"
+        android:gravity="center"/>
+
+</LinearLayout>

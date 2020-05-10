@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "367328841017",
+    "firebase_url": "https://my-news-4e143.firebaseio.com",
+    "project_id": "my-news-4e143",
+    "storage_bucket": "my-news-4e143.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367328841017:android:747e97a098ff2b01a2ace8",
+        "android_client_info": {
+          "package_name": "com.yotamshoval.mynews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367328841017-2u06jgjguashm249fjdqr29rlc0u9lb8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACvTICo8jZWrMJu3w4MBTT6ZvFPzGhXE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367328841017-2u06jgjguashm249fjdqr29rlc0u9lb8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

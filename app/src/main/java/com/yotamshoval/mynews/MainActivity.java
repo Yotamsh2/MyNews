@@ -3,11 +3,18 @@ package com.yotamshoval.mynews;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,10 +28,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.sql.Time;
 
+import static android.app.Notification.EXTRA_NOTIFICATION_ID;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String WEATHER_TAG = "weather";
     private static final String UPDATES_TAG = "updates";
+    private static final String CHANNEL_ID = "1";
+    private static final String ACTION_SNOOZE = "Action Snooze";
     private FloatingActionButton fab;
     private TextView timeSetTV;
     public String time;
@@ -48,14 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
                 final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
                 timePicker.setIs24HourView(true);
-/*
-                timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-                    @Override
-                    public void onTimeChanged(TimePicker timePicker, int i, int i1) {
-                        time = i+":"+i1;
-                    }
-                });
-*/
 
                 final ImageButton iconSport = dialogView.findViewById(R.id.iconSports);
                 final ImageButton iconCars = dialogView.findViewById(R.id.iconCars);
@@ -83,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
                         iconSport.setBackgroundColor(Color.LTGRAY);
                         categoryTV.setText("Sports");
 
-                    }});
+                    }
+                });
                 iconHealth.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -93,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
                         iconSport.setBackgroundColor(Color.WHITE);
                         categoryTV.setText("Health");
 
-                    }});
+                    }
+                });
                 iconMusic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -103,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
                         iconSport.setBackgroundColor(Color.WHITE);
                         categoryTV.setText("Music");
 
-                    }});
+                    }
+                });
                 builder.setCancelable(false);
 
                 builder.setView(dialogView).setPositiveButton("Set Notification", new DialogInterface.OnClickListener() {
@@ -112,20 +118,21 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int hour = timePicker.getCurrentHour();
                         int minute = timePicker.getCurrentMinute();
-                        String time;
 
-                        if(hour<10){
-                            if(minute<10)
-                                time = "0"+hour+":0"+minute;
-                            else time = "0"+hour+":"+minute;
-                        }else {
-                            if(minute<10)
-                                time = hour+":0"+minute;
-                            else time = hour+":"+minute;
+                        if (hour < 10) {
+                            if (minute < 10)
+                                time = "0" + hour + ":0" + minute;
+                            else time = "0" + hour + ":" + minute;
+                        } else {
+                            if (minute < 10)
+                                time = hour + ":0" + minute;
+                            else time = hour + ":" + minute;
                         }
 
                         timeSetTV.setText(time);
-                        Toast.makeText(MainActivity.this, "Notification saved!", Toast.LENGTH_SHORT).show();
+                        createNotificationChannel();
+                        startNotification();
+                        //Toast.makeText(MainActivity.this, "Notification saved!", Toast.LENGTH_SHORT).show();
 
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -141,8 +148,62 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.root_container,new UpdatesFragment(),UPDATES_TAG)
-                .add(R.id.ads_container,new AdvertisementFragment(),WEATHER_TAG).commit();
+        transaction.add(R.id.root_container, new UpdatesFragment(), UPDATES_TAG)
+                .add(R.id.ads_container, new AdvertisementFragment(), WEATHER_TAG).commit();
 
+    }
+
+    private void startNotification() {
+        // Create an explicit intent for an Activity in your app
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+/*
+        // Create action intent for the button
+        Intent snoozeIntent = new Intent(this, MainActivity.class);
+        snoozeIntent.setAction(ACTION_SNOOZE);
+        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+        PendingIntent snoozePendingIntent =
+                PendingIntent.getBroadcast(this, 0, snoozeIntent, 0);
+*/
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_news_white_24dp)
+                .setContentTitle("My News")
+                .setContentText("Notification set to nclsaknl cknamn skdnla kdnlak aslkn akdn ladnas." + time)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("Notification hour set to: " + time))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+/*                .addAction(R.drawable.ic_add_alert_black_24dp, getString(R.string.snooze),
+                        snoozePendingIntent)*/;
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(1, builder.build());
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            channel.setLightColor(Color.RED);
+            channel.setVibrationPattern(new long[]{100, 200, 400, 500, 200, 300, 400});
+            channel.enableLights(true);
+            channel.enableVibration(true);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

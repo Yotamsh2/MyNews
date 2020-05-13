@@ -18,4 +18,7 @@
     <string name="ads_by_location">Ads (by location)</string>
     <string name="set_notification">Set Notification</string>
     <string name="once_a_day_you_will_receive_the_last_news_in_which_category_you_ll_choose_please_set_the_time">Once a day you will receive the last news in which category you\'ll choose. Please set the time:</string>
+    <string name="channel_name">Set Notification</string>
+    <string name="channel_description">"Channel of users notification "</string>
+    <string name="snooze">Snooze</string>
 </resources>

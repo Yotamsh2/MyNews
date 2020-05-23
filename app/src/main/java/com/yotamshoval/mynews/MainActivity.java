@@ -3,19 +3,26 @@ package com.yotamshoval.mynews;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,22 +30,40 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.sql.Time;
+import java.util.List;
+import java.util.Locale;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String WEATHER_TAG = "weather";
+//    private static final String WEATHER_TAG = "weather";
     private static final String UPDATES_TAG = "updates";
     private static final String CHANNEL_ID = "1";
     private static final String ACTION_SNOOZE = "Action Snooze";
     private FloatingActionButton fab;
     private TextView timeSetTV;
     public String time;
+
+    //Ori
+    final String WEATHER_FRAGMENT_TAG = "weather_fragment";
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    TextView locationTv; //TO DELETE
+    private int locationRequestCode = 1000;
+    public double wayLatitude = 0.0, wayLongitude = 0.0; //passes to WeatherFragment
+    public String town; //passes to WeatherFragment
+    public String adminArea;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,10 +171,84 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Ori
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(20 * 1000);
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    if (location != null) {
+                        wayLatitude = location.getLatitude();
+                        wayLongitude = location.getLongitude();
+//                        locationTv.setText(String.format(Locale.US, "%s -- %s", wayLatitude, wayLongitude)); //shows longitude and latitde
+                    }
+                }
+            }
+        };
+
+        // check permission
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            // reuqest for permission
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    locationRequestCode);
+
+        } else {
+            // already permission granted
+            //get location here
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
+                if (location != null) {
+                    wayLatitude = location.getLatitude();
+                    wayLongitude = location.getLongitude();
+//                    locationTv.setText(String.format(Locale.US, "%s -- %s", wayLatitude, wayLongitude));
+
+                    //will show the city name with the cordinates gained
+                    try {
+                        Geocoder geo = new Geocoder(getApplicationContext(), Locale.getDefault());
+                        List<Address> addresses = geo.getFromLocation(wayLatitude, wayLongitude, 10);
+                        if (addresses.isEmpty()) {
+//                            locationTv.setText("Waiting for Location");
+                        } else {
+                            if (addresses.size() > 0) {
+//                                locationTv.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
+//                                Toast.makeText(getApplicationContext(), "Address:- " + addresses.get(0).getFeatureName() + addresses.get(0).getAdminArea() + addresses.get(0).getLocality(), Toast.LENGTH_LONG).show();
+                                town = addresses.get(0).getLocality();
+                                adminArea = addresses.get(0).getAdminArea();
+                                Log.d("MainActivity town", "town initialized:  " + town + ", wayLatitude: " + wayLatitude);
+
+                                //starting the Fragment with the needed params.
+                                WeatherFragment weatherFragment = WeatherFragment.newInstance(town, adminArea, wayLatitude, wayLongitude);
+                                getSupportFragmentManager().beginTransaction()
+                                        .add(R.id.ads_container, weatherFragment, WEATHER_FRAGMENT_TAG)
+//                                        .addToBackStack(null)
+                                        .commit();
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace(); // getFromLocation() may sometimes fail
+                    }
+                }
+            });
+        }
+        //----------------------End of FusedLocation------------------------------------//
+
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.root_container, new UpdatesFragment(), UPDATES_TAG)
-                .add(R.id.ads_container, new AdvertisementFragment(), WEATHER_TAG).commit();
+//        transaction.add(R.id.root_container, new UpdatesFragment(), UPDATES_TAG)
+//                .add(R.id.ads_container, new AdvertisementFragment(), WEATHER_TAG).commit();
+
+        transaction.add(R.id.root_container, new UpdatesFragment(), UPDATES_TAG).commit();
+//                .add(R.id.ads_container, new WeatherFragment(), WEATHER_TAG)
 
     }
 

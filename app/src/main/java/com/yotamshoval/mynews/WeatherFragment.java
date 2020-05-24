@@ -102,14 +102,14 @@ public class WeatherFragment extends Fragment {     //DEPRECATED
 
         //for example
         weathers.add(new Weather("" + town, "" + adminArea, "null", "" + wayLongitude, "" + wayLatitude, R.mipmap.ic_sunny_day));
-        weathers.add(new Weather("Eilat", "eilat", "25c", "34.94821", "29.55805", R.mipmap.ic_sunny_day)); //imagview(kind of the weather is null for example
-        weathers.add(new Weather("Ramat Gan", "Tel Aviv District", "25c", "34.81065", "32.08227", R.mipmap.ic_sunny_day)); //imagview(kind of the weather is null for example
-        weathers.add(new Weather("Jerusalem", "Jerusalem", "25c", "35.21633", "31.76904", R.mipmap.ic_cloudy_day)); //imagview(kind of the weather is null for example
-        weathers.add(new Weather("Beersheba", "South", "25c", "34.7913", "31.25181", R.mipmap.ic_partly_cloudy_day)); //imagview(kind of the weather is null for example
-        weathers.add(new Weather("Jaffa", "Tel Aviv District", "25c", "34.2145", "30.2145", R.mipmap.ic_rainy_day)); //imagview(kind of the weather is null for example
-        weathers.add(new Weather("Haifa", "Haifa", "25c", "34.9885", "32.81841", R.mipmap.ic_sunny_day)); //imagview(kind of the weather is null for example
-        weathers.add(new Weather("Tiberias", "Lower Galilee", "25c", "35.53124", "32.79221", R.mipmap.ic_rainy_day)); //imagview(kind of the weather is null for example
-        weathers.add(new Weather("Herzliya", "Sharon", "25c", "34.82536", "32.16627", R.mipmap.ic_rainy_day)); //imagview(kind of the weather is null for example
+//        weathers.add(new Weather("Eilat", "eilat", "25c", "34.94821", "29.55805", R.mipmap.ic_sunny_day)); //imagview(kind of the weather is null for example
+//        weathers.add(new Weather("Ramat Gan", "Tel Aviv District", "25c", "34.81065", "32.08227", R.mipmap.ic_sunny_day)); //imagview(kind of the weather is null for example
+//        weathers.add(new Weather("Jerusalem", "Jerusalem", "25c", "35.21633", "31.76904", R.mipmap.ic_cloudy_day)); //imagview(kind of the weather is null for example
+//        weathers.add(new Weather("Beersheba", "South", "25c", "34.7913", "31.25181", R.mipmap.ic_partly_cloudy_day)); //imagview(kind of the weather is null for example
+//        weathers.add(new Weather("Jaffa", "Tel Aviv District", "25c", "34.2145", "30.2145", R.mipmap.ic_rainy_day)); //imagview(kind of the weather is null for example
+//        weathers.add(new Weather("Haifa", "Haifa", "25c", "34.9885", "32.81841", R.mipmap.ic_sunny_day)); //imagview(kind of the weather is null for example
+//        weathers.add(new Weather("Tiberias", "Lower Galilee", "25c", "35.53124", "32.79221", R.mipmap.ic_rainy_day)); //imagview(kind of the weather is null for example
+//        weathers.add(new Weather("Herzliya", "Sharon", "25c", "34.82536", "32.16627", R.mipmap.ic_rainy_day)); //imagview(kind of the weather is null for example
 
 
         for (int i = 0; i < weathers.size(); i++) {

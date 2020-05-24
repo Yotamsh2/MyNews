@@ -102,7 +102,7 @@ public class WeatherFragment extends Fragment {     //DEPRECATED
 
         //for example
         weathers.add(new Weather("" + town, "" + adminArea, "null", "" + wayLongitude, "" + wayLatitude, R.mipmap.ic_sunny_day));
-        weathers.add(new Weather("Eilat", "eilat", "25c", "34.94821", "29.55805", R.mipmap.ic_sunny_day)); //imagview(kind of the weather is null for example
+//        weathers.add(new Weather("Eilat", "eilat", "25c", "34.94821", "29.55805", R.mipmap.ic_sunny_day)); //imagview(kind of the weather is null for example
 //        weathers.add(new Weather("Ramat Gan", "Tel Aviv District", "25c", "34.81065", "32.08227", R.mipmap.ic_sunny_day)); //imagview(kind of the weather is null for example
 //        weathers.add(new Weather("Jerusalem", "Jerusalem", "25c", "35.21633", "31.76904", R.mipmap.ic_cloudy_day)); //imagview(kind of the weather is null for example
 //        weathers.add(new Weather("Beersheba", "South", "25c", "34.7913", "31.25181", R.mipmap.ic_partly_cloudy_day)); //imagview(kind of the weather is null for example

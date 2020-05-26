@@ -42,6 +42,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.sql.Time;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,7 +50,7 @@ import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 public class MainActivity extends AppCompatActivity {
 
-//    private static final String WEATHER_TAG = "weather";
+    //    private static final String WEATHER_TAG = "weather";
     private static final String UPDATES_TAG = "updates";
     private static final String CHANNEL_ID = "1";
     private static final String ACTION_SNOOZE = "Action Snooze";
@@ -252,7 +253,14 @@ public class MainActivity extends AppCompatActivity {
                     //will show the city name with the cordinates gained
                     try {
                         Geocoder geo = new Geocoder(getApplicationContext(), Locale.getDefault());
-                        List<Address> addresses = geo.getFromLocation(wayLatitude, wayLongitude, 10);
+
+                        //set wayLatitue and wayLongitude to prevent Java IO Exeption by the getFromLocation().
+                        DecimalFormat df = new DecimalFormat();
+                        df.setMaximumFractionDigits(3);
+                        double lat = Double.parseDouble(df.format(wayLatitude));
+                        double lon = Double.parseDouble(df.format(wayLongitude));
+
+                        List<Address> addresses = geo.getFromLocation(lat, lon, 10);
                         if (addresses.isEmpty()) {
 //                            locationTv.setText("Waiting for Location");
                         } else {

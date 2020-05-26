@@ -201,7 +201,7 @@ public class WeatherFragment extends Fragment {     //DEPRECATED
 
                         //getting temperature
                         JSONObject temperatureJSONObject = jsonObject.getJSONObject("main");
-                        temperature = temperatureJSONObject.getString("feels_like");
+                        temperature = temperatureJSONObject.getString("temp");
                         Log.d("api_test", "temperature: " + temperature);
 
                         double tempKelvin = Double.parseDouble("" + temperature);

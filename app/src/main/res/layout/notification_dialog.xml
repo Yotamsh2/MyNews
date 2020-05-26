@@ -13,60 +13,105 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="10dp"
         android:text="@string/set_notification"
-        android:visibility="gone"/>
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:text="@string/once_a_day_you_will_receive_the_last_news_in_which_category_you_ll_choose_please_set_the_time" />
+        android:visibility="visible" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000"
+            android:text="Please choose how often would you like to receive notification:" />
+
+        <Button
+            android:id="@+id/cancelNotBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel \nNotification"
+            android:textSize="12sp"
+            android:backgroundTint="#FF0000"
+            android:visibility="gone"/>
+    </LinearLayout>
 
     <TimePicker
         android:id="@+id/timePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:timePickerMode="spinner"
-        android:visibility="visible"
-        />
+        android:visibility="gone" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/halfMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.5 min"
+            android:checked="true"
+            android:tag="0.5"/>
+        <RadioButton
+            android:id="@+id/oneMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1 min"
+            android:tag="1"/>
+        <RadioButton
+            android:id="@+id/fifteenMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15 min"
+            android:tag="15"/>
+    </RadioGroup>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:layout_marginTop="10dp">
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/iconSports"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_directions_run_black_24dp"/>
+            android:src="@drawable/ic_directions_run_black_24dp" />
+
         <ImageButton
             android:id="@+id/iconHealth"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_healing_black_24dp"/>
+            android:src="@drawable/ic_healing_black_24dp" />
+
         <ImageButton
             android:id="@+id/iconMusic"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_music_note_black_24dp"/>
+            android:src="@drawable/ic_music_note_black_24dp" />
+
         <ImageButton
             android:id="@+id/iconCars"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_directions_car_black_24dp"/>
+            android:src="@drawable/ic_directions_car_black_24dp" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/categoryTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/choose_category"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="@string/choose_category" />
 
 </LinearLayout>

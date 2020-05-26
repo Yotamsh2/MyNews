@@ -37,9 +37,9 @@ public class UpdatesFragment extends Fragment {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference dataRef = database.getReference("news");
+    private List<UpdateItem> items= new ArrayList<>();
     private RecyclerView recyclerView;
     private UpdateAdapter updateAdapter;
-    private List<UpdateItem> items= new ArrayList<>();
     private TextView addItem;
     private ProgressBar progressBar;
     private TextView messageTV;

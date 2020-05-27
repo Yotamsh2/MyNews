@@ -20,6 +20,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +46,7 @@ import java.sql.Time;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 final TextView categoryTV = dialogView.findViewById(R.id.categoryTV);
                 radioGroup = dialogView.findViewById(R.id.radioGroup);
                 cancelNotBtn = dialogView.findViewById(R.id.cancelNotBtn);
-                final Intent intent = new Intent(MainActivity.this,NotificationService.class);
+                final Intent intent = new Intent(MainActivity.this, NotificationService.class);
 
                 iconCars.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -163,12 +165,12 @@ public class MainActivity extends AppCompatActivity {
                         else if (time.equals("15 min"))
                             time = "15";
 */
-                        if(categoryTV.getText().toString().equals("Choose category"))
+                        if (categoryTV.getText().toString().equals("Choose category"))
                             categoryTV.setText("Sports");
                         intent.putExtra("time", time);
-                        intent.putExtra("category",categoryTV.getText().toString());
+                        intent.putExtra("category", categoryTV.getText().toString());
                         startService(intent);
-                        String cat = timeChecked.getText().toString()+" "+categoryTV.getText().toString();
+                        String cat = timeChecked.getText().toString() + " " + categoryTV.getText().toString();
                         timeSetTV.setText(cat);
                         timeSetTV.setVisibility(View.VISIBLE);
 
@@ -211,7 +213,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Ori
+
+//        //Ori
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         locationRequest = LocationRequest.create();
@@ -233,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        // check permission
+//        // check permission
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -248,47 +251,51 @@ public class MainActivity extends AppCompatActivity {
                 if (location != null) {
                     wayLatitude = location.getLatitude();
                     wayLongitude = location.getLongitude();
+                    new GeoCoderAsyncTask(wayLatitude, wayLongitude).execute();
 //                    locationTv.setText(String.format(Locale.US, "%s -- %s", wayLatitude, wayLongitude));
 
-                    //will show the city name with the cordinates gained
-                    try {
-                        Geocoder geo = new Geocoder(getApplicationContext(), Locale.getDefault());
+//                    //will show the city name with the cordinates gained
+//                    try {
+//                        Geocoder geo = new Geocoder(getApplicationContext(), Locale.getDefault());
+//
+//                        //set wayLatitue and wayLongitude to prevent Java IO Exeption by the getFromLocation().
+//                        DecimalFormat df = new DecimalFormat();
+//                        df.setMaximumFractionDigits(3);
+//                        double lat = Double.parseDouble(df.format(wayLatitude));
+//                        double lon = Double.parseDouble(df.format(wayLongitude));
+//
+//                        List<Address> addresses = geo.getFromLocation(lat, lon, 10);
+//                        if (addresses.isEmpty()) {
+////                            locationTv.setText("Waiting for Location");
+//                        } else {
+//                            if (addresses.size() > 0) {
+////                                locationTv.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
+////                                Toast.makeText(getApplicationContext(), "Address:- " + addresses.get(0).getFeatureName() + addresses.get(0).getAdminArea() + addresses.get(0).getLocality(), Toast.LENGTH_LONG).show();
+//                                town = addresses.get(0).getLocality();
+//                                adminArea = addresses.get(0).getAdminArea();
+//                                Log.d("MainActivity town", "town initialized:  " + town + ", wayLatitude: " + wayLatitude);
+//
+//                                //starting the Fragment with the needed params.
+//                                WeatherFragment weatherFragment = WeatherFragment.newInstance(town, adminArea, wayLatitude, wayLongitude);
+//                                getSupportFragmentManager().beginTransaction()
+//                                        .add(R.id.ads_container, weatherFragment, WEATHER_FRAGMENT_TAG)
+////                                        .addToBackStack(null)
+//                                        .commit();
+//                            }
+//                        }
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace(); // getFromLocation() may sometimes fail
+//                    }
+//                }
+//            });
+//        }
+                    //----------------------End of FusedLocation------------------------------------//
 
-                        //set wayLatitue and wayLongitude to prevent Java IO Exeption by the getFromLocation().
-                        DecimalFormat df = new DecimalFormat();
-                        df.setMaximumFractionDigits(3);
-                        double lat = Double.parseDouble(df.format(wayLatitude));
-                        double lon = Double.parseDouble(df.format(wayLongitude));
-
-                        List<Address> addresses = geo.getFromLocation(lat, lon, 10);
-                        if (addresses.isEmpty()) {
-//                            locationTv.setText("Waiting for Location");
-                        } else {
-                            if (addresses.size() > 0) {
-//                                locationTv.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
-//                                Toast.makeText(getApplicationContext(), "Address:- " + addresses.get(0).getFeatureName() + addresses.get(0).getAdminArea() + addresses.get(0).getLocality(), Toast.LENGTH_LONG).show();
-                                town = addresses.get(0).getLocality();
-                                adminArea = addresses.get(0).getAdminArea();
-                                Log.d("MainActivity town", "town initialized:  " + town + ", wayLatitude: " + wayLatitude);
-
-                                //starting the Fragment with the needed params.
-                                WeatherFragment weatherFragment = WeatherFragment.newInstance(town, adminArea, wayLatitude, wayLongitude);
-                                getSupportFragmentManager().beginTransaction()
-                                        .add(R.id.ads_container, weatherFragment, WEATHER_FRAGMENT_TAG)
-//                                        .addToBackStack(null)
-                                        .commit();
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace(); // getFromLocation() may sometimes fail
-                    }
                 }
+
             });
         }
-        //----------------------End of FusedLocation------------------------------------//
-
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 //        transaction.add(R.id.root_container, new UpdatesFragment(), UPDATES_TAG)
@@ -297,6 +304,67 @@ public class MainActivity extends AppCompatActivity {
         transaction.add(R.id.root_container, new UpdatesFragment(), UPDATES_TAG).commit();
 //                .add(R.id.ads_container, new WeatherFragment(), WEATHER_TAG)
 
+
     }
 
+    class GeoCoderAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        double wayLatitude, wayLongitude;
+
+        public GeoCoderAsyncTask(double wayLatitude, double wayLongitude) {
+            this.wayLatitude = wayLatitude;
+            this.wayLongitude = wayLongitude;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            //will show the city name with the cordinates gained
+            try {
+                Geocoder geo = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+                //set wayLatitue and wayLongitude to prevent Java IO Exeption by the getFromLocation().
+                DecimalFormat df = new DecimalFormat();
+                df.setMaximumFractionDigits(3);
+                double lat = Double.parseDouble(df.format(wayLatitude));
+                double lon = Double.parseDouble(df.format(wayLongitude));
+
+                List<Address> addresses = geo.getFromLocation(lat, lon, 10);
+                if (addresses.isEmpty()) {
+//                            locationTv.setText("Waiting for Location");
+                } else {
+                    if (addresses.size() > 0) {
+//                                locationTv.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
+//                                Toast.makeText(getApplicationContext(), "Address:- " + addresses.get(0).getFeatureName() + addresses.get(0).getAdminArea() + addresses.get(0).getLocality(), Toast.LENGTH_LONG).show();
+                        town = addresses.get(0).getLocality();
+                        adminArea = addresses.get(0).getAdminArea();
+                        Log.d("MainActivity town", "town initialized:  " + town + ", wayLatitude: " + wayLatitude);
+
+                        //starting the Fragment with the needed params.
+                        WeatherFragment weatherFragment = WeatherFragment.newInstance(town, adminArea, wayLatitude, wayLongitude);
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.ads_container, weatherFragment, WEATHER_FRAGMENT_TAG)
+//                                        .addToBackStack(null)
+                                .commit();
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace(); // getFromLocation() may sometimes fail
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.d("api_test", "onPostExecute");
+        }
+    }
 }
+
+
+
+
+
+
+
